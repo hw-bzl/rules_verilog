@@ -5,6 +5,10 @@
 
 A small Bazel module that provides reusable SystemVerilog/Verilog dependency graph metadata via `verilog_library`.
 
+> FAQ
+> 
+> How this is different from https://github.com/hdl/bazel_rules_hdl? Please check https://github.com/bazelbuild/bazel-central-registry/pull/7852 and https://github.com/MrAMS/bazel_rules_verilog/issues/1 for more details
+
 ## What This Module Does
 
 `verilog_library` collects:
