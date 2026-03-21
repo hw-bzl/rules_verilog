@@ -15,10 +15,12 @@ The primary goal of `rules_verilog` is to provide only the most **foundational**
 
 `verilog_library` collects:
 
-- `srcs` (`.v`, `.sv`)
-- `hdrs` (`.vh`, `.svh`)
-- `data` (runtime/compile-side data files)
-- `deps` (other `verilog_library` targets)
+- `srcs` (`.v`, `.sv`) — Verilog/SystemVerilog source files
+- `hdrs` (`.vh`, `.svh`) — Verilog/SystemVerilog header files
+- `includes` — include search paths (auto-derived from `hdrs` locations + explicit paths)
+- `data` — data files needed during compilation or simulation
+- `deps` — other `verilog_library` targets
+- `standard` — Verilog/SystemVerilog standard version (defaults to `"2017"`)
 
 and propagates a transitive `VerilogInfo` provider that downstream rules can consume, like [rules_verilator](https://github.com/MrAMS/bazel_rules_verilator) and [rules_vivado](https://github.com/CruxML/bazel_rules_vivado).
 
