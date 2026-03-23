@@ -20,7 +20,7 @@ def _leaf_provider_test_impl(ctx):
 
     return analysistest.end(env)
 
-def _transitive_dag_test_impl(ctx):
+def _transitive_deps_test_impl(ctx):
     env = analysistest.begin(ctx)
     target = analysistest.target_under_test(env)
     info = target[VerilogInfo]
@@ -63,7 +63,7 @@ def _bad_src_extension_test_impl(ctx):
     return analysistest.end(env)
 
 leaf_provider_test = analysistest.make(_leaf_provider_test_impl)
-transitive_dag_test = analysistest.make(_transitive_dag_test_impl)
+transitive_deps_test = analysistest.make(_transitive_deps_test_impl)
 legacy_standard_test = analysistest.make(_legacy_standard_test_impl)
 explicit_includes_test = analysistest.make(_explicit_includes_test_impl)
 bad_src_extension_test = analysistest.make(
@@ -82,8 +82,8 @@ def verilog_library_test_suite(name):
         target_under_test = ":leaf",
     )
 
-    transitive_dag_test(
-        name = name + "_transitive_dag",
+    transitive_deps_test(
+        name = name + "_transitive_deps",
         target_under_test = ":top",
     )
 
@@ -106,7 +106,7 @@ def verilog_library_test_suite(name):
         name = name,
         tests = [
             name + "_leaf_provider",
-            name + "_transitive_dag",
+            name + "_transitive_deps",
             name + "_legacy_standard",
             name + "_explicit_includes",
             name + "_bad_src_extension",

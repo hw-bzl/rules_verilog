@@ -14,7 +14,10 @@ def _verilog_library_impl(ctx):
     dep_infos = [dep[VerilogInfo] for dep in ctx.attr.deps]
 
     hdr_includes = [f.dirname for f in ctx.files.hdrs]
-    pkg_includes = [ctx.label.package + "/" + inc if inc else ctx.label.package for inc in ctx.attr.includes]
+    if ctx.label.package:
+        pkg_includes = [ctx.label.package + "/" + inc if inc else ctx.label.package for inc in ctx.attr.includes]
+    else:
+        pkg_includes = [inc for inc in ctx.attr.includes if inc]
 
     return [
         VerilogInfo(
