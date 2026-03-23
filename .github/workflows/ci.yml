@@ -2,9 +2,8 @@ name: CI
 
 on:
   push:
-    paths-ignore:
-      - "**.md"
-      - "LICENSE"
+    branches:
+      - master
   pull_request:
 
 jobs:
@@ -14,8 +13,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        bazel-version: ["7.5.0", "latest"]
+        os: [ubuntu-latest, macos-latest, windows-2022]
+        bazel-version: ["7.*", "8.*", "9.*"]
 
     steps:
       - name: Checkout code
@@ -24,15 +23,9 @@ jobs:
       - name: Setup Bazel
         uses: bazel-contrib/setup-bazel@0.9.0
         with:
-          bazelisk-version: "1.x"
           bazelisk-cache: true
           repository-cache: true
           disk-cache: ${{ github.workflow }}-${{ matrix.os }}-${{ matrix.bazel-version }}
-
-      - name: Build all targets
-        env:
-          USE_BAZEL_VERSION: ${{ matrix.bazel-version }}
-        run: bazel build //...
 
       - name: Run all tests
         env:

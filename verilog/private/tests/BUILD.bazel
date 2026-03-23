@@ -28,6 +28,19 @@ verilog_library(
 )
 
 verilog_library(
+    name = "legacy_target",
+    srcs = ["dep_a.sv"],
+    standard = "2001",
+)
+
+verilog_library(
+    name = "with_includes",
+    srcs = ["dep_a.sv"],
+    hdrs = ["leaf.svh"],
+    includes = ["extra_inc"],
+)
+
+verilog_library(
     name = "bad_src",
     srcs = ["invalid.txt"],
     tags = ["manual"],
