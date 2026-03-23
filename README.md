@@ -29,7 +29,7 @@ and propagates a transitive `VerilogInfo` provider that downstream rules can con
 Add to `MODULE.bazel`:
 
 ```starlark
-bazel_dep(name = "rules_verilog", version = "0.1.0")
+bazel_dep(name = "rules_verilog", version = "1.0.0")
 ```
 
 ## Usage
