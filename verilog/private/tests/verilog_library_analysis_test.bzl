@@ -17,6 +17,7 @@ def _leaf_provider_test_impl(ctx):
     asserts.equals(env, [], info.deps.to_list())
     asserts.equals(env, "", info.standard)
     asserts.equals(env, 1, len(info.includes.to_list()))
+    asserts.equals(env, "leaf.sv", info.top.basename)
 
     return analysistest.end(env)
 
@@ -57,6 +58,36 @@ def _explicit_includes_test_impl(ctx):
 
     return analysistest.end(env)
 
+def _top_name_matching_test_impl(ctx):
+    """Test that top is resolved by matching basename to label name."""
+    env = analysistest.begin(ctx)
+    target = analysistest.target_under_test(env)
+    info = target[VerilogInfo]
+
+    asserts.equals(env, "top.sv", info.top.basename)
+
+    return analysistest.end(env)
+
+def _top_explicit_test_impl(ctx):
+    """Test that an explicit top attribute is used."""
+    env = analysistest.begin(ctx)
+    target = analysistest.target_under_test(env)
+    info = target[VerilogInfo]
+
+    asserts.equals(env, "dep_a.sv", info.top.basename)
+
+    return analysistest.end(env)
+
+def _top_none_test_impl(ctx):
+    """Test that top is None when no resolution is possible."""
+    env = analysistest.begin(ctx)
+    target = analysistest.target_under_test(env)
+    info = target[VerilogInfo]
+
+    asserts.equals(env, None, info.top)
+
+    return analysistest.end(env)
+
 def _bad_src_extension_test_impl(ctx):
     env = analysistest.begin(ctx)
     asserts.expect_failure(env, "expected .v or .sv")
@@ -66,6 +97,9 @@ leaf_provider_test = analysistest.make(_leaf_provider_test_impl)
 transitive_deps_test = analysistest.make(_transitive_deps_test_impl)
 legacy_standard_test = analysistest.make(_legacy_standard_test_impl)
 explicit_includes_test = analysistest.make(_explicit_includes_test_impl)
+top_name_matching_test = analysistest.make(_top_name_matching_test_impl)
+top_explicit_test = analysistest.make(_top_explicit_test_impl)
+top_none_test = analysistest.make(_top_none_test_impl)
 bad_src_extension_test = analysistest.make(
     _bad_src_extension_test_impl,
     expect_failure = True,
@@ -97,6 +131,21 @@ def verilog_library_test_suite(name):
         target_under_test = ":with_includes",
     )
 
+    top_name_matching_test(
+        name = name + "_top_name_matching",
+        target_under_test = ":top",
+    )
+
+    top_explicit_test(
+        name = name + "_top_explicit",
+        target_under_test = ":explicit_top",
+    )
+
+    top_none_test(
+        name = name + "_top_none",
+        target_under_test = ":utility_lib",
+    )
+
     bad_src_extension_test(
         name = name + "_bad_src_extension",
         target_under_test = ":bad_src",
@@ -109,6 +158,9 @@ def verilog_library_test_suite(name):
             name + "_transitive_deps",
             name + "_legacy_standard",
             name + "_explicit_includes",
+            name + "_top_name_matching",
+            name + "_top_explicit",
+            name + "_top_none",
             name + "_bad_src_extension",
         ],
     )

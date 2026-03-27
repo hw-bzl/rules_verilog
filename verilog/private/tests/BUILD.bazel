@@ -41,6 +41,23 @@ verilog_library(
 )
 
 verilog_library(
+    name = "explicit_top",
+    srcs = [
+        "dep_a.sv",
+        "dep_b.sv",
+    ],
+    top = "dep_a.sv",
+)
+
+verilog_library(
+    name = "utility_lib",
+    srcs = [
+        "dep_a.sv",
+        "dep_b.sv",
+    ],
+)
+
+verilog_library(
     name = "bad_src",
     srcs = ["invalid.txt"],
     tags = ["manual"],
