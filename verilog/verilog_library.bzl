@@ -55,6 +55,10 @@ verilog_library = rule(
             doc = "Additional include search paths, relative to this package.",
             default = [],
         ),
+        "module_name": attr.string(
+            doc = "The top-level module name. Empty string means not specified.",
+            default = "",
+        ),
         "srcs": attr.label_list(
             doc = "Verilog or SystemVerilog sources.",
             allow_files = [".v", ".sv"],
@@ -63,10 +67,6 @@ verilog_library = rule(
             doc = "Verilog/SystemVerilog standard version. Empty string means not specified; consumer rules apply their default.",
             default = "",
             values = ["", "1995", "2001", "2005", "2009", "2012", "2017", "2023"],
-        ),
-        "module_name": attr.string(
-            doc = "The top-level module name. Empty string means not specified.",
-            default = "",
         ),
     },
     provides = [VerilogInfo],
