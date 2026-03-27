@@ -41,12 +41,12 @@ verilog_library(
 )
 
 verilog_library(
-    name = "explicit_top",
+    name = "explicit_module_name",
     srcs = [
         "dep_a.sv",
         "dep_b.sv",
     ],
-    top = "dep_a.sv",
+    module_name = "dep_a",
 )
 
 verilog_library(

@@ -9,6 +9,6 @@ VerilogInfo = provider(
         "includes": "depset[str]: Include search paths for this target.",
         "srcs": "depset[File]: Verilog/SV source files for this target.",
         "standard": "str: Verilog/SystemVerilog standard version for this target.",
-        "top": "File or None: The source file representing the top module entry point. Basename (minus extension) is expected to match the module name. None for utility libraries with no single top.",
+        "module_name": "str: The top-level module name.",
     },
 )
