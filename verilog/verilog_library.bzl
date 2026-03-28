@@ -27,7 +27,7 @@ def _verilog_library_impl(ctx):
             includes = depset(hdr_includes + pkg_includes),
             data = depset(ctx.files.data),
             standard = ctx.attr.standard,
-            module_name = ctx.attr.module_name,
+            top_module = ctx.attr.top_module,
             deps = depset(dep_infos, order = "postorder", transitive = [d.deps for d in dep_infos]),
         ),
         DefaultInfo(files = depset(ctx.files.srcs + ctx.files.hdrs + ctx.files.data)),
@@ -55,10 +55,6 @@ verilog_library = rule(
             doc = "Additional include search paths, relative to this package.",
             default = [],
         ),
-        "module_name": attr.string(
-            doc = "The top-level module name. Empty string means not specified.",
-            default = "",
-        ),
         "srcs": attr.label_list(
             doc = "Verilog or SystemVerilog sources.",
             allow_files = [".v", ".sv"],
@@ -67,6 +63,10 @@ verilog_library = rule(
             doc = "Verilog/SystemVerilog standard version. Empty string means not specified; consumer rules apply their default.",
             default = "",
             values = ["", "1995", "2001", "2005", "2009", "2012", "2017", "2023"],
+        ),
+        "top_module": attr.string(
+            doc = "The top module of this library. This is a local concept; the library's own entry-point module, not necessarily the global design top. Empty string means not specified.",
+            default = "",
         ),
     },
     provides = [VerilogInfo],

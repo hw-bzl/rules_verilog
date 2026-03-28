@@ -17,7 +17,7 @@ def _leaf_provider_test_impl(ctx):
     asserts.equals(env, [], info.deps.to_list())
     asserts.equals(env, "", info.standard)
     asserts.equals(env, 1, len(info.includes.to_list()))
-    asserts.equals(env, "", info.module_name)
+    asserts.equals(env, "", info.top_module)
 
     return analysistest.end(env)
 
@@ -58,23 +58,23 @@ def _explicit_includes_test_impl(ctx):
 
     return analysistest.end(env)
 
-def _module_name_explicit_test_impl(ctx):
-    """Test that an explicit module_name attribute is used."""
+def _top_module_explicit_test_impl(ctx):
+    """Test that an explicit top_module attribute is used."""
     env = analysistest.begin(ctx)
     target = analysistest.target_under_test(env)
     info = target[VerilogInfo]
 
-    asserts.equals(env, "dep_a", info.module_name)
+    asserts.equals(env, "dep_a", info.top_module)
 
     return analysistest.end(env)
 
-def _module_name_default_test_impl(ctx):
-    """Test that module_name defaults to empty string when not specified."""
+def _top_module_default_test_impl(ctx):
+    """Test that top_module defaults to empty string when not specified."""
     env = analysistest.begin(ctx)
     target = analysistest.target_under_test(env)
     info = target[VerilogInfo]
 
-    asserts.equals(env, "", info.module_name)
+    asserts.equals(env, "", info.top_module)
 
     return analysistest.end(env)
 
@@ -87,8 +87,8 @@ leaf_provider_test = analysistest.make(_leaf_provider_test_impl)
 transitive_deps_test = analysistest.make(_transitive_deps_test_impl)
 legacy_standard_test = analysistest.make(_legacy_standard_test_impl)
 explicit_includes_test = analysistest.make(_explicit_includes_test_impl)
-module_name_explicit_test = analysistest.make(_module_name_explicit_test_impl)
-module_name_default_test = analysistest.make(_module_name_default_test_impl)
+top_module_explicit_test = analysistest.make(_top_module_explicit_test_impl)
+top_module_default_test = analysistest.make(_top_module_default_test_impl)
 bad_src_extension_test = analysistest.make(
     _bad_src_extension_test_impl,
     expect_failure = True,
@@ -120,13 +120,13 @@ def verilog_library_test_suite(name):
         target_under_test = ":with_includes",
     )
 
-    module_name_explicit_test(
-        name = name + "_module_name_explicit",
-        target_under_test = ":explicit_module_name",
+    top_module_explicit_test(
+        name = name + "_top_module_explicit",
+        target_under_test = ":explicit_top_module",
     )
 
-    module_name_default_test(
-        name = name + "_module_name_default",
+    top_module_default_test(
+        name = name + "_top_module_default",
         target_under_test = ":utility_lib",
     )
 
@@ -142,8 +142,8 @@ def verilog_library_test_suite(name):
             name + "_transitive_deps",
             name + "_legacy_standard",
             name + "_explicit_includes",
-            name + "_module_name_explicit",
-            name + "_module_name_default",
+            name + "_top_module_explicit",
+            name + "_top_module_default",
             name + "_bad_src_extension",
         ],
     )

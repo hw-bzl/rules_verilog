@@ -20,7 +20,7 @@ The primary goal of `rules_verilog` is to provide only the most **foundational**
 - `includes` — include search paths (auto-derived from `hdrs` locations + explicit paths)
 - `data` — data files needed during compilation or simulation
 - `deps` — other `verilog_library` targets
-- `module_name` — top-level module name (optional; empty string means "unspecified")
+- `top_module` — the top module of this library (optional; empty string means "unspecified")
 - `standard` — Verilog/SystemVerilog standard version (optional; empty string means "unspecified")
 
 and propagates a transitive `VerilogInfo` provider that downstream rules can consume, like [rules_verilator](https://github.com/MrAMS/bazel_rules_verilator) and [rules_vivado](https://github.com/CruxML/bazel_rules_vivado).
