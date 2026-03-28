@@ -25,13 +25,9 @@ The primary goal of `rules_verilog` is to provide only the most **foundational**
 
 and propagates a transitive `VerilogInfo` provider that downstream rules can consume, like [rules_verilator](https://github.com/MrAMS/bazel_rules_verilator) and [rules_vivado](https://github.com/CruxML/bazel_rules_vivado).
 
-## Installation (Bzlmod)
+## Installation
 
-Add to `MODULE.bazel`:
-
-```starlark
-bazel_dep(name = "rules_verilog", version = "1.0.0")
-```
+Refer to the [BCR](https://registry.bazel.build/modules/rules_verilog) for guidance.
 
 ## Usage
 
