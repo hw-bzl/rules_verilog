@@ -11,6 +11,7 @@ def _verilog_library_impl(ctx):
     Returns:
       A list of providers: VerilogInfo and DefaultInfo.
     """
+
     dep_infos = [dep[VerilogInfo] for dep in ctx.attr.deps]
 
     hdr_includes = [f.dirname for f in ctx.files.hdrs]
@@ -26,6 +27,7 @@ def _verilog_library_impl(ctx):
             includes = depset(hdr_includes + pkg_includes),
             data = depset(ctx.files.data),
             standard = ctx.attr.standard,
+            top_module = ctx.attr.top_module,
             deps = depset(dep_infos, order = "postorder", transitive = [d.deps for d in dep_infos]),
         ),
         DefaultInfo(files = depset(ctx.files.srcs + ctx.files.hdrs + ctx.files.data)),
@@ -62,5 +64,10 @@ verilog_library = rule(
             default = "",
             values = ["", "1995", "2001", "2005", "2009", "2012", "2017", "2023"],
         ),
+        "top_module": attr.string(
+            doc = "The top module of this library. This is a local concept; the library's own entry-point module, not necessarily the global design top. Empty string means not specified.",
+            default = "",
+        ),
     },
+    provides = [VerilogInfo],
 )

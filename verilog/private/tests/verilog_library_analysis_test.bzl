@@ -17,6 +17,7 @@ def _leaf_provider_test_impl(ctx):
     asserts.equals(env, [], info.deps.to_list())
     asserts.equals(env, "", info.standard)
     asserts.equals(env, 1, len(info.includes.to_list()))
+    asserts.equals(env, "", info.top_module)
 
     return analysistest.end(env)
 
@@ -57,6 +58,26 @@ def _explicit_includes_test_impl(ctx):
 
     return analysistest.end(env)
 
+def _top_module_explicit_test_impl(ctx):
+    """Test that an explicit top_module attribute is used."""
+    env = analysistest.begin(ctx)
+    target = analysistest.target_under_test(env)
+    info = target[VerilogInfo]
+
+    asserts.equals(env, "dep_a", info.top_module)
+
+    return analysistest.end(env)
+
+def _top_module_default_test_impl(ctx):
+    """Test that top_module defaults to empty string when not specified."""
+    env = analysistest.begin(ctx)
+    target = analysistest.target_under_test(env)
+    info = target[VerilogInfo]
+
+    asserts.equals(env, "", info.top_module)
+
+    return analysistest.end(env)
+
 def _bad_src_extension_test_impl(ctx):
     env = analysistest.begin(ctx)
     asserts.expect_failure(env, "expected .v or .sv")
@@ -66,6 +87,8 @@ leaf_provider_test = analysistest.make(_leaf_provider_test_impl)
 transitive_deps_test = analysistest.make(_transitive_deps_test_impl)
 legacy_standard_test = analysistest.make(_legacy_standard_test_impl)
 explicit_includes_test = analysistest.make(_explicit_includes_test_impl)
+top_module_explicit_test = analysistest.make(_top_module_explicit_test_impl)
+top_module_default_test = analysistest.make(_top_module_default_test_impl)
 bad_src_extension_test = analysistest.make(
     _bad_src_extension_test_impl,
     expect_failure = True,
@@ -97,6 +120,16 @@ def verilog_library_test_suite(name):
         target_under_test = ":with_includes",
     )
 
+    top_module_explicit_test(
+        name = name + "_top_module_explicit",
+        target_under_test = ":explicit_top_module",
+    )
+
+    top_module_default_test(
+        name = name + "_top_module_default",
+        target_under_test = ":utility_lib",
+    )
+
     bad_src_extension_test(
         name = name + "_bad_src_extension",
         target_under_test = ":bad_src",
@@ -109,6 +142,8 @@ def verilog_library_test_suite(name):
             name + "_transitive_deps",
             name + "_legacy_standard",
             name + "_explicit_includes",
+            name + "_top_module_explicit",
+            name + "_top_module_default",
             name + "_bad_src_extension",
         ],
     )
