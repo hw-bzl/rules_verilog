@@ -1,0 +1,7 @@
+# {version}
+
+```python
+bazel_dep(name = "rules_verilog", version = "{version}")
+```
+
+Additional documentation can be found at: https://github.com/hw-bzl/rules_verilog
