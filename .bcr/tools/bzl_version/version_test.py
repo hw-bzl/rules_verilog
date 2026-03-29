@@ -18,7 +18,7 @@ def rlocation(runfiles: Runfiles, rlocationpath: str) -> Path:
         rlocationpath: The runfile key
 
     Returns:
-        The requested runifle.
+        The requested runfile.
     """
     # TODO: https://github.com/periareon/rules_venv/issues/37
     source_repo = None
@@ -34,10 +34,10 @@ def rlocation(runfiles: Runfiles, rlocationpath: str) -> Path:
 
 
 class RepoVersionTests(unittest.TestCase):
-    """Test that the `{PKG_NAME}` versions match for WORKSPACE and bzlmod."""
+    """Test that the `{PKG_NAME}` versions match in version.bzl, MODULE.bazel, and README.md."""
 
     def test_versions(self) -> None:
-        """Test that the version.bzl and MOUDLE.bazel versions are synced."""
+        """Test that the version.bzl and MODULE.bazel versions are synced."""
         runfiles = Runfiles.Create()
         if not runfiles:
             raise EnvironmentError("Failed to locate runfiles.")
@@ -48,9 +48,10 @@ class RepoVersionTests(unittest.TestCase):
             version_bzl.read_text(encoding="utf-8"),
             re.MULTILINE,
         )
-        assert bzl_version, f"Failed to parse version from {version_bzl}"
-        assert len(bzl_version) == 1, (
-            f"Expect len(bzl_version)=1, but got {len(bzl_version)}"
+        self.assertTrue(bzl_version, f"Failed to parse version from {version_bzl}")
+        self.assertTrue(
+            len(bzl_version) == 1,
+            (f"Expect len(bzl_version)=1, but got {len(bzl_version)}"),
         )
 
         bzl_version = bzl_version[0]
@@ -61,7 +62,7 @@ class RepoVersionTests(unittest.TestCase):
             module_bazel.read_text(encoding="utf-8"),
             re.MULTILINE,
         )
-        assert module_versions, f"Failed to parse version from {module_bazel}"
+        self.assertTrue(module_versions, f"Failed to parse version from {module_bazel}")
 
         readme_bazel = rlocation(runfiles, f"{PKG_NAME}/README.md")
         readme_versions = re.findall(
@@ -71,12 +72,14 @@ class RepoVersionTests(unittest.TestCase):
         )
         # allow readme_versions is empty
 
-        assert all(e == bzl_version for e in module_versions), (
-            "Version in MODULE.bazel do not match"
+        self.assertTrue(
+            all(e == bzl_version for e in module_versions),
+            ("Version in MODULE.bazel does not match"),
         )
 
-        assert all(e == bzl_version for e in readme_versions), (
-            "Version in README.md do not match"
+        self.assertTrue(
+            all(e == bzl_version for e in readme_versions),
+            ("Version in README.md does not match"),
         )
 
 
