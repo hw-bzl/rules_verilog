@@ -30,7 +30,15 @@ def _verilog_library_impl(ctx):
             top_module = ctx.attr.top_module,
             deps = depset(dep_infos, order = "postorder", transitive = [d.deps for d in dep_infos]),
         ),
-        DefaultInfo(files = depset(ctx.files.srcs + ctx.files.hdrs + ctx.files.data)),
+        DefaultInfo(
+            files = depset(ctx.files.srcs + ctx.files.hdrs + ctx.files.data),
+        ),
+        coverage_common.instrumented_files_info(
+            ctx,
+            source_attributes = ["srcs", "hdrs"],
+            dependency_attributes = ["deps"],
+            extensions = ["v", "sv", "vh", "svh"],
+        ),
     ]
 
 verilog_library = rule(
