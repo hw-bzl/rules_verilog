@@ -20,6 +20,7 @@ The primary goal of `rules_verilog` is to provide only the most **foundational**
 - `includes` — include search paths (auto-derived from `hdrs` locations + explicit paths)
 - `data` — data files needed during compilation or simulation
 - `deps` — other `verilog_library` targets
+- `library` — Verilog/SystemVerilog library name (defaults to the target's name)
 - `top_module` — the local top module of this library (optional; empty string means "unspecified")
 - `standard` — Verilog/SystemVerilog standard version (optional; empty string means "unspecified")
 
@@ -42,6 +43,7 @@ verilog_library(
     name = "core",
     srcs = ["core.sv"],
     hdrs = ["core_defines.svh"],
+    library = "my_core",
     standard = "2012",
 )
 

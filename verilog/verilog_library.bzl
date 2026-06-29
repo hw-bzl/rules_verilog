@@ -25,6 +25,7 @@ def _verilog_library_impl(ctx):
             srcs = depset(ctx.files.srcs),
             hdrs = depset(ctx.files.hdrs),
             includes = depset(hdr_includes + pkg_includes),
+            library = ctx.attr.library or ctx.label.name,
             data = depset(ctx.files.data),
             standard = ctx.attr.standard,
             top_module = ctx.attr.top_module,
@@ -62,6 +63,10 @@ verilog_library = rule(
         "includes": attr.string_list(
             doc = "Additional include search paths, relative to this package.",
             default = [],
+        ),
+        "library": attr.string(
+            doc = "Verilog/SystemVerilog library name this target compiles into. Defaults to the target's name.",
+            default = "",
         ),
         "srcs": attr.label_list(
             doc = "Verilog or SystemVerilog sources.",

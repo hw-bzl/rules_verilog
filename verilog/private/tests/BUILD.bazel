@@ -50,6 +50,12 @@ verilog_library(
 )
 
 verilog_library(
+    name = "custom_lib_target",
+    srcs = ["dep_a.sv"],
+    library = "my_custom_lib",
+)
+
+verilog_library(
     name = "utility_lib",
     srcs = [
         "dep_a.sv",
