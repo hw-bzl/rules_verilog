@@ -14,6 +14,7 @@ def _leaf_provider_test_impl(ctx):
     asserts.equals(env, ["leaf.sv"], _file_basenames(info.srcs.to_list()))
     asserts.equals(env, ["leaf.svh"], _file_basenames(info.hdrs.to_list()))
     asserts.equals(env, ["leaf.dat"], _file_basenames(info.data.to_list()))
+    asserts.equals(env, "leaf", info.library)
     asserts.equals(env, [], info.deps.to_list())
     asserts.equals(env, "", info.standard)
     asserts.equals(env, 1, len(info.includes.to_list()))
@@ -34,6 +35,17 @@ def _transitive_deps_test_impl(ctx):
     # Postorder guarantees dependencies before dependents (dep_a before dep_b).
     dep_src_order = [f.basename for d in dep_providers for f in d.srcs.to_list()]
     asserts.equals(env, ["dep_a.sv", "dep_b.sv"], dep_src_order)
+
+    return analysistest.end(env)
+
+def _custom_library_test_impl(ctx):
+    env = analysistest.begin(ctx)
+    target = analysistest.target_under_test(env)
+    info = target[VerilogInfo]
+
+    asserts.equals(env, "my_custom_lib", info.library)
+    asserts.equals(env, "", info.standard)
+    asserts.equals(env, ["dep_a.sv"], _file_basenames(info.srcs.to_list()))
 
     return analysistest.end(env)
 
@@ -85,6 +97,7 @@ def _bad_src_extension_test_impl(ctx):
 
 leaf_provider_test = analysistest.make(_leaf_provider_test_impl)
 transitive_deps_test = analysistest.make(_transitive_deps_test_impl)
+custom_library_test = analysistest.make(_custom_library_test_impl)
 legacy_standard_test = analysistest.make(_legacy_standard_test_impl)
 explicit_includes_test = analysistest.make(_explicit_includes_test_impl)
 top_module_explicit_test = analysistest.make(_top_module_explicit_test_impl)
@@ -108,6 +121,11 @@ def verilog_library_test_suite(name):
     transitive_deps_test(
         name = name + "_transitive_deps",
         target_under_test = ":top",
+    )
+
+    custom_library_test(
+        name = name + "_custom_library",
+        target_under_test = ":custom_lib_target",
     )
 
     legacy_standard_test(
@@ -140,6 +158,7 @@ def verilog_library_test_suite(name):
         tests = [
             name + "_leaf_provider",
             name + "_transitive_deps",
+            name + "_custom_library",
             name + "_legacy_standard",
             name + "_explicit_includes",
             name + "_top_module_explicit",
