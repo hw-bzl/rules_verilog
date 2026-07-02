@@ -1,3 +1,4 @@
+load("@rules_vhdl//vhdl:defs.bzl", "vhdl_library")
 load("//verilog:defs.bzl", "verilog_library")
 load(":verilog_library_analysis_test.bzl", "verilog_library_test_suite")
 
@@ -67,6 +68,52 @@ verilog_library(
     name = "bad_src",
     srcs = ["invalid.txt"],
     tags = ["manual"],
+)
+
+# VHDL fixtures + cross-language test cases.
+
+vhdl_library(
+    name = "vhdl_transitive",
+    srcs = ["vhdl_transitive.vhd"],
+)
+
+vhdl_library(
+    name = "vhdl_dep",
+    srcs = ["vhdl_dep.vhd"],
+    deps = [":vhdl_transitive"],
+)
+
+# Mixed-language case: Verilog srcs of its own AND a vhdl_library dep.
+# Verifies both the VHDL dep chain (incl. transitive) flows through this
+# target's `VerilogInfo.vhdl_deps` and that the target only emits
+# VerilogInfo (no VhdlInfo despite the VHDL dep).
+verilog_library(
+    name = "mixed_lib_target",
+    srcs = ["mixed.sv"],
+    library = "mixed_lib",
+    vhdl_deps = [":vhdl_dep"],
+)
+
+# Empty-Verilog wrap pattern: zero Verilog srcs + explicit library + a
+# vhdl_deps entry. Symmetric to the vhdl_library wrap pattern in
+# rules_vhdl. Lets a pure-VHDL source land in a named Verilog library
+# namespace for simulator-runner consumers that read library from
+# `VerilogInfo.library` while collecting VHDL srcs from
+# `VerilogInfo.vhdl_deps`.
+verilog_library(
+    name = "vhdl_namespace_wrap",
+    srcs = [],
+    library = "vhdl_namespace",
+    vhdl_deps = [":vhdl_dep"],
+)
+
+# Transitive case: a pure-Verilog `deps` entry that itself has `vhdl_deps`.
+# The consumer's own `vhdl_deps` field must include those entries — locks
+# in the "walk through the Verilog graph" branch of the depset construction.
+verilog_library(
+    name = "verilog_consumer_of_mixed",
+    srcs = ["mixed.sv"],
+    deps = [":mixed_lib_target"],
 )
 
 verilog_library_test_suite(name = "verilog_library_tests")
