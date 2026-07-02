@@ -41,14 +41,14 @@ def _verilog_info_init(
         dict of field name -> value, consumed by the provider machinery.
     """
     return {
-        "srcs": srcs if srcs != None else depset(),
-        "hdrs": hdrs if hdrs != None else depset(),
         "data": data if data != None else depset(),
+        "deps": deps if deps != None else depset(),
+        "hdrs": hdrs if hdrs != None else depset(),
         "includes": includes if includes != None else depset(),
         "library": library,
+        "srcs": srcs if srcs != None else depset(),
         "standard": standard,
         "top_module": top_module,
-        "deps": deps if deps != None else depset(),
         "vhdl_deps": vhdl_deps if vhdl_deps != None else depset(),
     }
 
