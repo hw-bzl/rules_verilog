@@ -1,0 +1,12 @@
+[book]
+authors = [
+    "UebelAndre",
+    "MrAMS",
+]
+language = "en"
+multilingual = false
+src = "src"
+title = "rules_verilog"
+
+[output.html]
+git-repository-url = "https://github.com/MrAMS/bazel_rules_verilog"
