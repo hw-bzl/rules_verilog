@@ -1,0 +1,367 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>rules_verilog</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root to javascript -->
+        <script>
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            var sidebar = null;
+            var sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rules_verilog</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        <a href="https://github.com/MrAMS/bazel_rules_verilog" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-github"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="rules_verilog"><a class="header" href="#rules_verilog">rules_verilog</a></h1>
+<p>Bazel rules that provide the foundational Verilog/SystemVerilog
+interfaces the wider HDL ecosystem builds on.</p>
+<h2 id="overview"><a class="header" href="#overview">Overview</a></h2>
+<p><code>rules_verilog</code> deliberately ships a small surface area: a single
+<a href="./verilog_library.html"><code>verilog_library</code></a> rule that collects sources,
+headers, include paths, and dependencies, plus the
+<a href="./verilog_providers.html"><code>VerilogInfo</code></a> provider it propagates. Downstream
+rulesets — <a href="https://github.com/MrAMS/bazel_rules_verilator"><code>rules_verilator</code></a>,
+<a href="https://registry.bazel.build/modules/rules_vivado"><code>rules_vivado</code></a>,
+and other simulators, synthesis, and lint tools — consume that provider
+to drive their own actions. Keeping the core minimal lets a single set
+of <code>*_library</code> targets be reused across every downstream tool without
+each ruleset re-inventing the source-collection layer.</p>
+<p>Cross-language dependencies onto VHDL entities are declared via
+<code>vhdl_deps</code> (from <a href="https://registry.bazel.build/modules/rules_vhdl"><code>rules_vhdl</code></a>)
+and surface on <code>VerilogInfo.vhdl_deps</code> for consumers walking mixed-language
+designs.</p>
+<h2 id="quick-start"><a class="header" href="#quick-start">Quick start</a></h2>
+<h3 id="modulebazel"><a class="header" href="#modulebazel"><code>MODULE.bazel</code></a></h3>
+<pre><code class="language-python">bazel_dep(name = "rules_verilog", version = "{version}")
+</code></pre>
+<h3 id="hellohellosv"><a class="header" href="#hellohellosv"><code>hello/hello.sv</code></a></h3>
+<pre><code class="language-systemverilog">module hello (
+    input  wire clk,
+    input  wire rst,
+    output reg  led
+);
+  always_ff @(posedge clk) begin
+    if (rst) led &lt;= 1'b0;
+    else     led &lt;= ~led;
+  end
+endmodule
+</code></pre>
+<h3 id="hellobuildbazel"><a class="header" href="#hellobuildbazel"><code>hello/BUILD.bazel</code></a></h3>
+<pre><code class="language-python">load("@rules_verilog//verilog:defs.bzl", "verilog_library")
+
+verilog_library(
+    name = "hello",
+    srcs = ["hello.sv"],
+    top_module = "hello",
+    standard = "2012",
+)
+</code></pre>
+<p>The <code>:hello</code> target is now a <code>VerilogInfo</code> producer that any downstream
+rule — a simulator, a synthesizer, a linter — can consume without
+knowing anything else about how the sources are organized.</p>
+<h3 id="composing-libraries"><a class="header" href="#composing-libraries">Composing libraries</a></h3>
+<pre><code class="language-python">load("@rules_verilog//verilog:defs.bzl", "verilog_library")
+
+verilog_library(
+    name = "bus_headers",
+    hdrs = ["axi_params.svh"],
+    includes = ["include/bus"],
+)
+
+verilog_library(
+    name = "core",
+    srcs = ["core.sv"],
+    hdrs = ["core_defines.svh"],
+    library = "my_core",
+    standard = "2012",
+)
+
+verilog_library(
+    name = "soc",
+    srcs = ["soc_top.sv"],
+    deps = [
+        ":bus_headers",
+        ":core",
+    ],
+    data = ["rom_init.hex"],
+    top_module = "soc_top",
+)
+</code></pre>
+<p>Each target contributes its own sources and inherits the transitive
+dep graph — downstream rules see a single merged <code>VerilogInfo</code>.</p>
+<h2 id="going-further"><a class="header" href="#going-further">Going further</a></h2>
+<ul>
+<li><a href="./rules.html">Rules</a> — the public rule set.</li>
+<li><a href="./verilog_providers.html"><code>VerilogInfo</code></a> — the provider passed to
+downstream rules (simulators, synthesis, lint).</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="rules"><a class="header" href="#rules">Rules</a></h1>
+<p>The public rule surface of <code>rules_verilog</code>. Every downstream ruleset
+(simulators, synthesis, lint) consumes the
+<a href="./verilog_providers.html"><code>VerilogInfo</code></a> these targets propagate.</p>
+<h2 id="library"><a class="header" href="#library">Library</a></h2>
+<ul>
+<li><a href="./verilog_library.html"><code>verilog_library</code></a> — collect Verilog /
+SystemVerilog sources, headers, include paths, and dependencies
+(including cross-language <code>vhdl_deps</code>) into a single reusable target.</li>
+</ul>
+<h2 id="providers"><a class="header" href="#providers">Providers</a></h2>
+<ul>
+<li><a href="./verilog_providers.html"><code>VerilogInfo</code></a> — the provider passed to
+downstream rules.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated with Stardoc: http://skydoc.bazel.build -->
+<p>verilog_library</p>
+<h2 id="rules-1"><a class="header" href="#rules-1">Rules</a></h2>
+<ul>
+<li><a href="verilog_library.html#verilog_library">verilog_library</a></li>
+</ul>
+<p><a id="verilog_library"></a></p>
+<h2 id="verilog_library"><a class="header" href="#verilog_library">verilog_library</a></h2>
+<pre>
+load("@rules_verilog//verilog:verilog_library.bzl", "verilog_library")
+
+verilog_library(<a href="verilog_library.html#verilog_library-name">name</a>, <a href="verilog_library.html#verilog_library-deps">deps</a>, <a href="verilog_library.html#verilog_library-srcs">srcs</a>, <a href="verilog_library.html#verilog_library-data">data</a>, <a href="verilog_library.html#verilog_library-hdrs">hdrs</a>, <a href="verilog_library.html#verilog_library-includes">includes</a>, <a href="verilog_library.html#verilog_library-library">library</a>, <a href="verilog_library.html#verilog_library-standard">standard</a>, <a href="verilog_library.html#verilog_library-top_module">top_module</a>, <a href="verilog_library.html#verilog_library-vhdl_deps">vhdl_deps</a>)
+</pre>
+<p>Collect Verilog/SystemVerilog design units into a library target.</p>
+<p><strong>ATTRIBUTES</strong></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Type</th><th style="text-align: left">Mandatory</th><th style="text-align: left">Default</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a id="verilog_library-name"></a>name</td><td style="text-align: left">A unique name for this target.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels#target-names">Name</a></td><td style="text-align: left">required</td><td style="text-align: left"></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-deps"></a>deps</td><td style="text-align: left">Other verilog_library targets this design depends on.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-srcs"></a>srcs</td><td style="text-align: left">Verilog or SystemVerilog sources.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-data"></a>data</td><td style="text-align: left">Data files needed during compilation or simulation.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-hdrs"></a>hdrs</td><td style="text-align: left">Verilog or SystemVerilog headers.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-includes"></a>includes</td><td style="text-align: left">Additional include search paths, relative to this package.</td><td style="text-align: left">List of strings</td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-library"></a>library</td><td style="text-align: left">Verilog/SystemVerilog library name this target compiles into. Defaults to the target's name.</td><td style="text-align: left">String</td><td style="text-align: left">optional</td><td style="text-align: left"><code>""</code></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-standard"></a>standard</td><td style="text-align: left">Verilog/SystemVerilog standard version. Empty string means not specified; consumer rules apply their default.</td><td style="text-align: left">String</td><td style="text-align: left">optional</td><td style="text-align: left"><code>""</code></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-top_module"></a>top_module</td><td style="text-align: left">The top module of this library. This is a local concept; the library's own entry-point module, not necessarily the global design top. Empty string means not specified.</td><td style="text-align: left">String</td><td style="text-align: left">optional</td><td style="text-align: left"><code>""</code></td></tr>
+<tr><td style="text-align: left"><a id="verilog_library-vhdl_deps"></a>vhdl_deps</td><td style="text-align: left">vhdl_library targets this Verilog/SV library instantiates (e.g. via component-bound VHDL entities). The rule walks each entry's <code>VhdlInfo</code> and stores the transitive VHDL dep chain on <code>VerilogInfo.vhdl_deps</code>, so consumers that already iterate <code>VerilogInfo</code> see cross-language sources by additionally walking that field. Empty by default — pure-Verilog targets get an empty <code>vhdl_deps</code> depset.</td><td style="text-align: left"><a href="https://bazel.build/concepts/labels">List of labels</a></td><td style="text-align: left">optional</td><td style="text-align: left"><code>[]</code></td></tr>
+</tbody></table>
+</div><div style="break-before: page; page-break-before: always;"></div><!-- Generated with Stardoc: http://skydoc.bazel.build -->
+<p>VerilogInfo</p>
+<h2 id="providers-1"><a class="header" href="#providers-1">Providers</a></h2>
+<ul>
+<li><a href="verilog_providers.html#VerilogInfo">VerilogInfo</a></li>
+</ul>
+<p><a id="VerilogInfo"></a></p>
+<h2 id="veriloginfo"><a class="header" href="#veriloginfo">VerilogInfo</a></h2>
+<pre>
+load("@rules_verilog//verilog:verilog_info.bzl", "VerilogInfo")
+
+VerilogInfo(*, <a href="verilog_providers.html#VerilogInfo-_init-srcs">srcs</a>, <a href="verilog_providers.html#VerilogInfo-_init-hdrs">hdrs</a>, <a href="verilog_providers.html#VerilogInfo-_init-data">data</a>, <a href="verilog_providers.html#VerilogInfo-_init-includes">includes</a>, <a href="verilog_providers.html#VerilogInfo-_init-library">library</a>, <a href="verilog_providers.html#VerilogInfo-_init-standard">standard</a>, <a href="verilog_providers.html#VerilogInfo-_init-top_module">top_module</a>, <a href="verilog_providers.html#VerilogInfo-_init-deps">deps</a>, <a href="verilog_providers.html#VerilogInfo-_init-vhdl_deps">vhdl_deps</a>)
+</pre>
+<p>Verilog/SystemVerilog compilation information.</p>
+<p><strong>CONSTRUCTOR PARAMETERS</strong></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th><th style="text-align: left">Default Value</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-srcs"></a>srcs</td><td style="text-align: left">depset[File] of Verilog/SV sources. Defaults to <code>depset()</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-hdrs"></a>hdrs</td><td style="text-align: left">depset[File] of <code>.vh</code> / <code>.svh</code> headers. Defaults to <code>depset()</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-data"></a>data</td><td style="text-align: left">depset[File] of runtime data files. Defaults to <code>depset()</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-includes"></a>includes</td><td style="text-align: left">depset[str] of include search paths. Defaults to <code>depset()</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-library"></a>library</td><td style="text-align: left">str Verilog/SV library name. Defaults to <code>""</code>.</td><td style="text-align: left"><code>""</code></td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-standard"></a>standard</td><td style="text-align: left">str Verilog/SV standard version. Defaults to <code>""</code>.</td><td style="text-align: left"><code>""</code></td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-top_module"></a>top_module</td><td style="text-align: left">str top-module name. Defaults to <code>""</code>.</td><td style="text-align: left"><code>""</code></td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-deps"></a>deps</td><td style="text-align: left">depset[VerilogInfo] transitive Verilog dep chain. Defaults to <code>depset()</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-_init-vhdl_deps"></a>vhdl_deps</td><td style="text-align: left">depset[VhdlInfo] transitive cross-language dep chain. Defaults to <code>depset()</code>.</td><td style="text-align: left"><code>None</code></td></tr>
+</tbody></table>
+</div>
+<p><strong>FIELDS</strong></p>
+<div class="table-wrapper"><table><thead><tr><th style="text-align: left">Name</th><th style="text-align: left">Description</th></tr></thead><tbody>
+<tr><td style="text-align: left"><a id="VerilogInfo-data"></a>data</td><td style="text-align: left">depset[File]: Data files needed during compilation for this target.</td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-deps"></a>deps</td><td style="text-align: left">depset[VerilogInfo]: Transitive dependency providers.</td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-hdrs"></a>hdrs</td><td style="text-align: left">depset[File]: Verilog/SV header files for this target.</td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-includes"></a>includes</td><td style="text-align: left">depset[str]: Include search paths for this target.</td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-library"></a>library</td><td style="text-align: left">str: Verilog/SV library name for this target.</td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-srcs"></a>srcs</td><td style="text-align: left">depset[File]: Verilog/SV source files for this target.</td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-standard"></a>standard</td><td style="text-align: left">str: Verilog/SystemVerilog standard version for this target.</td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-top_module"></a>top_module</td><td style="text-align: left">str: The top module of this library.</td></tr>
+<tr><td style="text-align: left"><a id="VerilogInfo-vhdl_deps"></a>vhdl_deps</td><td style="text-align: left">depset[VhdlInfo]: Transitive VHDL dependencies a Verilog/SV design instantiates via component-bound entities. Consumers walking this depset pick up VHDL srcs for the cross-language part of the dep graph alongside the Verilog part walked via <code>deps</code>. Empty for pure-Verilog design units. Symmetric to <code>VhdlInfo.verilog_deps</code> in rules_vhdl.</td></tr>
+</tbody></table>
+</div>
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
