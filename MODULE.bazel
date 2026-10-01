@@ -12,3 +12,12 @@ bazel_dep(name = "rules_rust_mdbook", version = "0.74.0", dev_dependency = True)
 bazel_dep(name = "rules_shell", version = "0.7.1", dev_dependency = True)
 bazel_dep(name = "rules_venv", version = "0.23.0", dev_dependency = True)
 bazel_dep(name = "stardoc", version = "0.8.0", dev_dependency = True, repo_name = "io_bazel_stardoc")
+
+new_local_repository = use_repo_rule("@bazel_tools//tools/build_defs/repo:local.bzl", "new_local_repository")
+
+new_local_repository(
+    name = "rules_verilog_external_test_repo",
+    build_file = "//verilog/private/tests:external_repo.BUILD.bazel",
+    dev_dependency = True,
+    path = "verilog/private/tests/external_repo",
+)

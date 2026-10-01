@@ -77,6 +77,17 @@ def _explicit_includes_test_impl(ctx):
 
     return analysistest.end(env)
 
+def _external_repo_includes_test_impl(ctx):
+    env = analysistest.begin(ctx)
+    target = analysistest.target_under_test(env)
+    info = target[VerilogInfo]
+
+    includes = info.includes.to_list()
+    expected = target.label.workspace_root + "/include"
+    asserts.true(env, expected in includes, "Expected '%s' in includes, got: %s" % (expected, includes))
+
+    return analysistest.end(env)
+
 def _top_module_explicit_test_impl(ctx):
     """Test that an explicit top_module attribute is used."""
     env = analysistest.begin(ctx)
@@ -206,6 +217,7 @@ transitive_deps_test = analysistest.make(_transitive_deps_test_impl)
 custom_library_test = analysistest.make(_custom_library_test_impl)
 legacy_standard_test = analysistest.make(_legacy_standard_test_impl)
 explicit_includes_test = analysistest.make(_explicit_includes_test_impl)
+external_repo_includes_test = analysistest.make(_external_repo_includes_test_impl)
 top_module_explicit_test = analysistest.make(_top_module_explicit_test_impl)
 top_module_default_test = analysistest.make(_top_module_default_test_impl)
 verilog_library_single_provider_test = analysistest.make(_verilog_library_single_provider_test_impl)
@@ -250,6 +262,11 @@ def verilog_library_test_suite(name):
     explicit_includes_test(
         name = name + "_explicit_includes",
         target_under_test = ":with_includes",
+    )
+
+    external_repo_includes_test(
+        name = name + "_external_repo_includes",
+        target_under_test = "@rules_verilog_external_test_repo//:ext",
     )
 
     top_module_explicit_test(
@@ -303,6 +320,7 @@ def verilog_library_test_suite(name):
             name + "_custom_library",
             name + "_legacy_standard",
             name + "_explicit_includes",
+            name + "_external_repo_includes",
             name + "_top_module_explicit",
             name + "_top_module_default",
             name + "_pure_verilog_single_provider",

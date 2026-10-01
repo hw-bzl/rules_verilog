@@ -27,8 +27,11 @@ def _verilog_library_impl(ctx):
     direct_vhdl_dep_infos = [dep[VhdlInfo] for dep in ctx.attr.vhdl_deps]
 
     hdr_includes = [f.dirname for f in ctx.files.hdrs]
-    if ctx.label.package:
-        pkg_includes = [ctx.label.package + "/" + inc if inc else ctx.label.package for inc in ctx.attr.includes]
+
+    # A library in an external repository resolves its includes under that repository's root.
+    pkg_dir = "/".join([p for p in (ctx.label.workspace_root, ctx.label.package) if p])
+    if pkg_dir:
+        pkg_includes = [pkg_dir + "/" + inc if inc else pkg_dir for inc in ctx.attr.includes]
     else:
         pkg_includes = [inc for inc in ctx.attr.includes if inc]
 

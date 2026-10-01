@@ -1,0 +1,9 @@
+load("@rules_verilog//verilog:defs.bzl", "verilog_library")
+
+verilog_library(
+    name = "ext",
+    srcs = ["ext.sv"],
+    hdrs = ["include/ext/ext.svh"],
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+)
